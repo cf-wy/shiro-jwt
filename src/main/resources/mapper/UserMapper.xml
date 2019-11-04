@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.demo.dao.UserDao">
+    <delete id="deleteAll">
+        delete from sys_users
+    </delete>
+    <select id="findByUsername" parameterType="String" resultMap="baseMap">
+        select id,username,password,salt,locked from sys_users where username=#{username}
+    </select>
+    <resultMap id="baseMap" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="locked" property="locked"/>
+    </resultMap>
+    <select id="findRoles" parameterType="String" resultType="String">
+        select r.role from sys_users u
+        join sys_users_roles ur on u.id=ur.user_id
+        join sys_roles r on r.id=ur.role_id
+        where u.username=#{username}
+    </select>
+    <select id="findPermissions" parameterType="String" resultType="String">
+        select p.permission from sys_users u
+        join sys_users_roles ur on u.id=ur.user_id
+        join sys_roles r on r.id=ur.role_id
+        join sys_roles_permissions rp on rp.role_id=r.id
+        join sys_permissions p on p.id=rp.permission_id
+        where u.username=#{username}
+    </select>
+</mapper>

@@ -1,0 +1,82 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123456
+    url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8
+    username: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 15
+      minimum-idle: 5
+      pool-name: DatebookHikariCP
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    servlet:
+        content-type: text/html
+    mode: LEGACYHTML5
+    cache: false
+  mvc:
+    static-path-pattern: /static/**
+    servlet:
+      path:
+  resources:
+    static-locations: classpath:/static/
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.shiro.demo.model
+pagehelper:
+  page-size-zero: true
+  reasonable: true   #\u5F53pageNum <= 0\u65F6\u4F1A\u67E5\u8BE2\u7B2C\u4E00\u9875\uFF0CpageNum > \u603B\u6570\u7684\u65F6\u5019\uFF0C\u4F1A\u67E5\u8BE2\u6700\u540E\u4E00\u9875
+  supportMethodsArguments: false  #\u652F\u6301\u901A\u8FC7 Mapper \u63A5\u53E3\u53C2\u6570\u6765\u4F20\u9012\u5206\u9875\u53C2\u6570\uFF0C\u9ED8\u8BA4\u503Cfalse
+  helper-dialect: mysql
+mapper:
+  not-empty: false
+  identity: MYSQL
+
+logging:
+  level:
+    root: info
+    com.shiro.demo.dao: debug
+
+
+
+server:
+  port: 9000
+#  ssl:
+#    key-store: classpath:localhost.keystore
+#    key-store-password: 123456
+#    key-alias: localhost
+
+#sso:
+#  loginUrl: /formfilterlogin
+#  successUrl: /index
+#  unauthorizedUrl: /unauthorized
+#  filterChainDefinitions:
+#    - /favicon.ico = anon
+#    - /index = authc
+#    - /unauthorized = anon
+#    - /formfilterlogin = authc
+#    - /logout = logout
+#    - /static/** = anon
+#    - /** = authc
+shiro:
+  loginUrl: /login
+  successUrl: /index
+  unauthorizedUrl: /unauthorized
+
+
+# jwt 配置
+jwt:
+  # 加密密钥
+  secret: fadada
+  # token有效时长
+  expire: 7 # 7天，单位天
+  # token 存在 header 中的参数
+  header: token
+
