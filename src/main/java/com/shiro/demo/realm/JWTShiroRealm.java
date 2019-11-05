@@ -5,6 +5,7 @@ import com.shiro.demo.model.User;
 import com.shiro.demo.service.RoleService;
 import com.shiro.demo.service.UserService;
 import com.shiro.demo.util.JwtUtil;
+import lombok.Data;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,16 +13,10 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
-public class CustomRealm extends AuthorizingRealm {
-    @Autowired
+@Data
+public class JWTShiroRealm extends AuthorizingRealm {
     private UserService userService;
-    @Autowired
     private RoleService roleService;
-    @Autowired
     private JwtUtil jwtUtil;
 
     /**
@@ -48,10 +43,10 @@ public class CustomRealm extends AuthorizingRealm {
         if (user == null) {
             throw new AuthenticationException("该用户不存在！");
         }
-        if (user.getLocked()==1) {
+        /*if (user.getLocked()==1) {
             throw new AuthenticationException("该用户已被封号！");
-        }
-        return new SimpleAuthenticationInfo(token, token, "MyRealm");
+        }*/
+        return new SimpleAuthenticationInfo(token, token, getName());
     }
 
     /**
@@ -59,26 +54,11 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        /*System.out.println("————权限认证————");
-        String username = JWTUtil.getUsername(principals.toString());
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        // 此处最好使用缓存提升速度
-        UserInfo userInfo = userInfoMapper.selectByName(username);
-        userInfo = userInfoMapper.selectUserOfRole(userInfo.getUid());
-        if (userInfo == null || userInfo.getRoleList().isEmpty()) {
-            return authorizationInfo;
-        }
-        for (Role role : userInfo.getRoleList()) {
-            authorizationInfo.addRole(role.getRole());
-            role = roleMapper.selectRoleOfPerm(role.getId());
-            if (role == null || role.getPermissions().isEmpty()) {
-                continue;
-            }
-            for (Permission p : role.getPermissions()) {
-                authorizationInfo.addStringPermission(p.getPermission());
-            }
-        }
-        return authorizationInfo;*/
         return null;
+    }
+
+    @Override
+    public String getName() {
+        return "JWTShiroRealm";
     }
 }

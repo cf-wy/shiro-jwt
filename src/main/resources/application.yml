@@ -77,6 +77,5 @@ jwt:
   secret: fadada
   # token有效时长
   expire: 7 # 7天，单位天
-  # token 存在 header 中的参数
-  header: token
+
 
